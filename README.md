@@ -50,19 +50,31 @@ Four electricity procurement strategies were compared:
 Strategies were assessed using cost, volatility, CFaR, NPV, payback, emissions, and practicality.
 
 ## Key Findings
-- Under Step Change FY2030, additional data-centre demand reaches approximately 639 MW.
-- Mean price impact reaches around $19/MWh under Step Change FY2030.
-- Upper-tail impacts are much larger, with P95 impact around $49/MWh.
-- Winter shows the highest seasonal price impact.
-- Evening has the highest baseline price, but 10:00–14:00 shows the largest marginal impact.
-- Futures hedging provides the strongest cost and risk reduction.
-- Solar plus battery is most attractive for emissions reduction but requires high upfront capital.
+
+* NSW data-centre demand is projected to become a material source of continuous electricity load. By FY2030, additional demand reaches approximately **263 MW under Slower Growth**, **639 MW under Step Change**, and **1,221 MW under Accelerated Transition**, creating a sustained increase in NSW grid demand rather than a short-term peak-only effect.
+
+* This additional baseload demand increases NSW wholesale price pressure. Under the central Step Change FY2030 case, the model estimates a mean price impact of around **$19/MWh**, while the Upper-tail price impact (P95) impact reaches about **$49/MWh**. This shows that the risk is not only the average price increase, but also the much larger exposure during high-impact intervals.
+
+* Price impacts are uneven across market conditions. Winter produces the highest seasonal impacts, while 10:00–14:00 shows the largest marginal price impact even though evening remains the highest baseline-price period. Low-renewable output becomes most important when it overlaps with high demand and system stress.
+
+* The 50 MW data-centre profile converts these market impacts into a practical procurement problem. Because the facility operates as a large, near-continuous load, even moderate wholesale price increases translate into material cost exposure across the year.
+
+* Procurement exposure rises sharply with demand-growth intensity. By FY2030, estimated additional wholesale cost reaches around **$323 million under Step Change** and **over $1.1 billion under Accelerated Transition**, showing that higher data-centre load and upper-tail price impacts can materially affect electricity purchasing risk.
+
+* Strategy comparison shows that futures hedging is the strongest default cost-and-risk management option. In the central case, hedging reduces the mean five-year cost from about **$290 million under spot exposure** to about **$193 million**, while also reducing volatility and extreme-price exposure.
+
+* Battery storage and solar-plus-battery provide useful flexibility, especially for reducing grid purchases during expensive or high-risk periods. However, standalone battery does not outperform hedging on cost, while solar-plus-battery is most attractive where emissions reduction and long-term decarbonisation are priorities.
+
+* Overall, the analysis shows that data-centre electricity growth creates both **broad baseload procurement exposure** and **sharp upper-tail price risk**. The recommended response is a layered strategy: use futures hedging for core cost protection, while considering battery or solar-plus-battery where operational flexibility, emissions reduction, or long-term resilience are priorities.
+
 
 ## Tools and Technologies
 - Python
 - Pandas
+- Nemosis
 - NumPy
 - Scikit-learn
 - XGBoost
 - Matplotlib
+- Seaborn
 - Excel
