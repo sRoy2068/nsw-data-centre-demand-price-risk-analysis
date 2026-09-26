@@ -532,15 +532,6 @@ For **Step Change FY2030**:
 
 ---
 
-### Model Robustness
+### Executive Takeaway
 
-Sensitivity testing showed that the core result remained stable across alternative price caps.
-
-| Price Cap  | Mean Impact | P95 Impact |
-| ---------- | ----------: | ---------: |
-| p99        |  $19.28/MWh | $49.13/MWh |
-| p99.5      |  $19.69/MWh | $50.45/MWh |
-| p99.9      |  $20.03/MWh | $51.95/MWh |
-| $1,000/MWh |  $20.10/MWh | $51.51/MWh |
-
-> Step Change FY2030 mean impacts remain around **$19–20/MWh** and P95 impacts around **$49–52/MWh**, supporting the stability of the selected p99 specification.
+Future NSW data-centre growth creates a clear increase in wholesale price pressure, with the largest risks concentrated in **higher-growth scenarios, winter conditions and stressed market intervals**. Under the central Step Change case, FY2030 mean impact reaches **$19.28/MWh**, while P95 exposure rises to **$49.13/MWh**, showing that upper-tail risk is materially greater than average conditions. Overall, the analysis suggests that market exposure should be managed using both **broad procurement coverage and targeted protection during high-risk periods**.
