@@ -79,3 +79,52 @@ Price impact = $18/MWh
 FY2025 is used only as the **reference point for calculating additional data-centre demand**. It is not the baseline price year.
 
 This approach isolates the marginal effect of additional data-centre load by holding the underlying historical market conditions constant and changing only the demand-related scenario inputs.
+
+## Analytical Workflow
+
+The analysis follows an end-to-end workflow from **raw electricity-market data integration** through to **scenario-based price-impact and market-risk analysis**.
+
+```mermaid
+flowchart LR
+    A[NSW Price & Demand Data] --> C[Data Integration]
+    B[AEMO Renewable Dispatch Data] --> C
+
+    C --> D[Data Cleaning & EDA]
+    D --> E[Feature Engineering]
+    E --> F[XGBoost Price Model]
+    F --> G[Model Validation]
+
+    H[Data-Centre Demand Scenarios] --> I[Convert Annual Demand to Additional MW]
+    I --> J[Scenario Demand Injection]
+
+    G --> J
+    J --> K[Baseline vs Scenario Price Comparison]
+    K --> L[Market Risk Analysis]
+    L --> M[Procurement Strategy]
+```
+
+### Workflow Summary
+
+1. **Data Integration**
+   Combined 5-minute NSW wholesale price and demand data with AEMO solar, wind and hydro dispatch data, including timestamp reconciliation across sources.
+
+2. **Data Cleaning & Exploratory Analysis**
+   Validated temporal completeness, cleaned renewable-dispatch values and analysed price, demand, renewable-generation, seasonal and time-of-day patterns.
+
+3. **Feature Engineering**
+   Created temporal, net-demand and system-stress features to represent market conditions associated with elevated electricity prices.
+
+4. **Price Modelling & Validation**
+   Developed an XGBoost regression model and evaluated alternative price-cap settings using MAE, RMSE, R² and sensitivity testing.
+
+5. **Scenario Demand Injection**
+   Converted future annual data-centre demand projections into additional continuous MW and added this load to the historical NSW demand profile.
+
+6. **Baseline vs Scenario Comparison**
+   Generated prices under the original demand profile and under each additional-demand scenario, with the difference representing the estimated marginal price impact.
+
+7. **Market Risk Analysis**
+   Evaluated price impacts across growth scenarios, seasons, hours of day, renewable-output conditions, system-stress periods and upper-tail risk intervals.
+
+8. **Procurement Strategy**
+   Translated the resulting price-risk patterns into implications for electricity procurement, hedging and flexible demand management.
