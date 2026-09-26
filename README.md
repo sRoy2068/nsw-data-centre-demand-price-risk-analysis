@@ -442,3 +442,105 @@ The final specification was selected because it balanced three requirements:
 * **Robustness** — p99 capping reduced distortion from rare extreme spikes while preserving the broader structure of elevated-price behaviour.
 
 This combination made the model suitable for analysing **relative price impacts across demand-growth scenarios, seasons, hours and system-stress conditions**.
+
+Here’s a concise GitHub-ready **Key Findings** section using the most defensible figures and avoiding repetition.
+
+## Key Findings
+
+### 1. Price Impact Increases with Data-Centre Demand
+
+By FY2030, larger data-centre loads produced progressively larger wholesale price impacts.
+
+| Scenario               | Additional Demand | Mean Impact | P95 Impact |
+| ---------------------- | ----------------: | ----------: | ---------: |
+| Slower Growth          |         262.56 MW |   $7.96/MWh | $22.19/MWh |
+| Step Change            |         639.27 MW |  $19.28/MWh | $49.13/MWh |
+| Accelerated Transition |       1,221.46 MW |  $37.03/MWh | $89.26/MWh |
+
+> **Finding:** Under the central Step Change scenario, 639.27 MW of additional FY2030 demand increases modelled prices by **$19.28/MWh on average**, with substantially larger upper-tail impacts.
+
+<img width="682" height="364" alt="image" src="https://github.com/user-attachments/assets/134f5914-bd31-4312-95ee-3ba9894899f5" />
+
+---
+
+### 2. Upper-Tail Risk Is Much Larger Than Typical Impact
+
+For **Step Change FY2030**:
+
+| Metric | Price Impact |
+| ------ | -----------: |
+| Mean   |   $19.28/MWh |
+| Median |   $16.27/MWh |
+| P75    |   $27.20/MWh |
+| P95    |   $49.13/MWh |
+
+**P95 represents the 95th-percentile outcome — only 5% of modelled intervals experience a larger impact.**
+
+> **Finding:** High-risk intervals create materially greater exposure than the average or median result, making upper-tail risk important for procurement and hedging decisions.
+
+<img width="892" height="539" alt="image" src="https://github.com/user-attachments/assets/5efe9574-5bce-48c6-be67-9e6594d9e86a" />
+
+---
+
+### 3. Winter Has the Highest Seasonal Exposure
+
+Under **Step Change FY2030**:
+
+| Season | Mean Impact |
+| ------ | ----------: |
+| Summer |   $9.90/MWh |
+| Autumn |  $18.66/MWh |
+| Winter |  $28.67/MWh |
+| Spring |  $19.71/MWh |
+
+> **Finding:** Winter produces the highest mean impact at **$28.67/MWh**, compared with **$9.90/MWh in summer**, showing that price sensitivity varies substantially by season.
+
+<img width="682" height="366" alt="image" src="https://github.com/user-attachments/assets/fa4ba7d5-f66a-4a03-ac68-e786c9c8f82e" />
+
+---
+
+### 4. Highest Baseline Prices and Highest Marginal Impacts Occur at Different Times
+
+Evening remains the most expensive baseline-price period, but additional data-centre demand has its strongest marginal effect earlier in the day.
+
+| Hour  | Baseline Price | Mean Price Impact |
+| ----- | -------------: | ----------------: |
+| 11:00 |     $64.01/MWh |        $26.83/MWh |
+| 17:00 |    $187.43/MWh |        $19.77/MWh |
+| 18:00 |    $197.23/MWh |        $17.67/MWh |
+| 19:00 |    $162.41/MWh |        $16.09/MWh |
+
+> **Finding:** Marginal price impact peaks around **10:00–14:00**, reaching **$26.83/MWh at 11:00**, while evening hours retain the highest underlying price levels.
+
+<img width="1057" height="558" alt="image" src="https://github.com/user-attachments/assets/f236f513-4a45-447d-8139-18b35de31aa7" />
+
+---
+
+### 5. Low Renewable Output Matters Most When Combined with System Stress
+
+For **Step Change FY2030**:
+
+| Market Condition               | Mean Impact | P95 Impact |
+| ------------------------------ | ----------: | ---------: |
+| Low renewable + no core stress |  $17.92/MWh | $46.96/MWh |
+| Normal renewable + core stress |  $20.82/MWh | $54.11/MWh |
+| Low renewable + core stress    |  $22.64/MWh | $62.36/MWh |
+
+> **Finding:** Low renewable availability alone is not the strongest driver of price impact. Risk increases most when it overlaps with **high demand, low solar availability and core system stress**.
+
+<img width="892" height="523" alt="image" src="https://github.com/user-attachments/assets/1a1d1c3f-84b8-4c96-8bd1-41b98c133926" />
+
+---
+
+### Model Robustness
+
+Sensitivity testing showed that the core result remained stable across alternative price caps.
+
+| Price Cap  | Mean Impact | P95 Impact |
+| ---------- | ----------: | ---------: |
+| p99        |  $19.28/MWh | $49.13/MWh |
+| p99.5      |  $19.69/MWh | $50.45/MWh |
+| p99.9      |  $20.03/MWh | $51.95/MWh |
+| $1,000/MWh |  $20.10/MWh | $51.51/MWh |
+
+> Step Change FY2030 mean impacts remain around **$19–20/MWh** and P95 impacts around **$49–52/MWh**, supporting the stability of the selected p99 specification.
