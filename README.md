@@ -182,3 +182,90 @@ flowchart LR
   `NSW1_Price` • `NSW1_Demand` • `solar_dispatch` • `wind_dispatch` • `hydro_dispatch`
 
 This integrated dataset became the input for subsequent **data cleaning, exploratory analysis, feature engineering and price-impact modelling**.
+
+## Data Cleaning & Pre-Modelling Analysis
+
+Before model training, the integrated 5-minute dataset was cleaned and explored to understand the market conditions associated with NSW wholesale-price movements and identify suitable modelling features.
+
+### Data Cleaning & Preparation
+
+The dataset was validated for temporal completeness and consistency before analysis. Key preparation steps included:
+
+* checking date coverage, missing and duplicate timestamps;
+* validating the expected **5-minute interval structure**;
+* removing observations with incomplete renewable-dispatch data;
+* clipping negative aggregated renewable dispatch values to zero;
+* retaining complete days with **288 five-minute intervals**;
+* deriving temporal features including `Hour`, `DayOfWeek`, `Month`, `Season`, `Year` and `DayType`.
+
+These steps created a consistent time-series dataset for subsequent exploratory analysis and modelling.
+
+---
+
+### Exploratory Market Analysis
+
+Price, demand and renewable-generation behaviour were examined using descriptive statistics, distribution analysis, correlations, quantiles and time-based comparisons.
+
+Key findings were:
+
+* **Wholesale prices were highly right-skewed**, with a relatively small number of extreme intervals materially increasing the mean above the median.
+* **Higher demand was generally associated with higher prices**, particularly in the upper demand quartiles, but demand-price correlation was only moderate, indicating that demand alone could not explain price spikes.
+* **Solar dispatch was negatively associated with price**, with prices increasing as solar output declined during the evening.
+* **Hydro dispatch increased during high-price periods**, consistent with its role as a dispatchable balancing source.
+* Price pressure varied materially by **hour, month and season**, with elevated baseline prices concentrated around evening peaks and autumn/winter conditions.
+
+<!-- ADD EDA VISUAL HERE: price distribution or demand-vs-price -->
+
+<!--
+<img width="975" height="552" alt="image" src="https://github.com/user-attachments/assets/875237d2-2d00-46a5-a419-3ba258e3a80a" />
+
+-->
+
+---
+
+### System-Stress Analysis
+
+EDA showed that the highest-price conditions were associated with **combinations of market pressures**, rather than any single variable.
+
+To capture these interactions, several stress indicators were created:
+
+| Feature                  | Definition                                  |
+| ------------------------ | ------------------------------------------- |
+| `DemandStressFlag`       | Demand above the historical 75th percentile |
+| `CoreSystemStressFlag`   | High demand + low solar + evening peak      |
+| `SevereSystemStressFlag` | Core system stress + autumn/winter          |
+
+Price levels increased as market conditions became progressively tighter:
+
+**High Demand → High Demand + Low Solar + Evening Peak → Seasonal System Stress**
+
+This confirmed that wholesale-price risk is highly conditional and concentrated in periods where **demand pressure, reduced renewable availability and timing effects overlap**.
+
+<!-- ADD STRESS-CONDITION VISUAL HERE -->
+
+<!--
+![Price behaviour under market stress](outputs/system_stress_analysis.png)
+-->
+
+---
+
+### Feature Screening & Modelling Implications
+
+Candidate predictors were screened using:
+
+* Pearson and Spearman correlation analysis;
+* correlation-matrix inspection;
+* Variance Inflation Factor (VIF) for multicollinearity;
+* categorical encoding for seasonal and day-type variables;
+* a chronological train/test split to preserve the time-series structure.
+
+The pre-modelling analysis indicated that a simple demand-price regression would be insufficient. The downstream model therefore needed to capture:
+
+* electricity demand;
+* solar, wind and hydro dispatch;
+* net-demand conditions;
+* hour and seasonal effects;
+* day type;
+* system-stress interactions.
+
+These findings supported the use of a **nonlinear modelling approach** capable of representing interactions between demand, renewable availability and market conditions.
