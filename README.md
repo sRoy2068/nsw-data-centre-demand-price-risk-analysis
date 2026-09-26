@@ -347,3 +347,98 @@ This approach isolates the marginal effect of additional data-centre load by hol
 This framework provides a consistent way to test how increasingly large blocks of continuous data-centre demand affect NSW wholesale prices under comparable historical market conditions.
 
 By applying the same modelling structure across all scenario-year combinations, differences in price impact can be attributed primarily to the **scale of additional data-centre demand** rather than changes in the underlying modelling framework.
+
+## XGBoost Price Model
+
+The price model was designed to estimate NSW wholesale electricity prices from demand, renewable generation, temporal conditions and system-stress indicators.
+
+The objective was not to build a precise short-term forecasting system, but to create a consistent model structure for evaluating how wholesale prices respond to additional data-centre demand.
+
+---
+
+### Model Inputs
+
+The final feature set reflected the market relationships identified during the pre-modelling analysis in section 5.
+
+| Feature Group      | Example Variables                         |
+| ------------------ | ----------------------------------------- |
+| Demand             | `NSW1_Demand`, `Net_Demand`               |
+| Renewable Dispatch | Solar, wind, hydro                        |
+| Temporal           | Hour, day type, month, season             |
+| Market Stress      | Demand stress, core stress, severe stress |
+
+These variables allowed the model to capture interactions between electricity demand, renewable availability, time-of-day effects and stressed market conditions.
+
+---
+
+### Model Development & Selection
+
+A linear regression model was first used as a baseline, but its performance was limited because wholesale electricity prices are highly volatile and respond nonlinearly to changing market conditions.
+
+Tree-based models were then evaluated, with **XGBoost** selected for the final analysis because it could better capture nonlinear relationships and feature interactions.
+
+Price-lag and rolling-price variables were also tested during model development. Although these improved predictive accuracy, they made the model less responsive to injected demand because predictions remained strongly anchored to historical prices.
+
+For the final scenario analysis, a **lag-free XGBoost specification** was therefore selected so that the model responded more directly to changes in demand and market conditions.
+
+---
+
+### Price-Cap Sensitivity
+
+NSW wholesale electricity prices contain rare extreme RRP spikes that can disproportionately influence model training and error metrics.
+
+To reduce this distortion, alternative target-price caps were tested at:
+
+* p99;
+* p99.5;
+* p99.9;
+* $1,000/MWh.
+
+| Price Cap  |       MAE |      RMSE |        R² |
+| ---------- | --------: | --------: | --------: |
+| **p99**    | **40.47** | **62.16** | **0.462** |
+| p99.5      |     41.07 |     64.54 |     0.455 |
+| p99.9      |     43.06 |     80.89 |     0.395 |
+| $1,000/MWh |     42.59 |     74.73 |     0.417 |
+
+The **p99 model** produced the strongest overall validation performance while retaining normal-to-high price behaviour and reducing the influence of rare extreme observations.
+
+P95 price impact represents the 95th-percentile outcome — only 5% of modelled intervals experience a larger price impact. It is used here as an upper-tail / high-risk measure rather than a typical outcome.
+
+Across alternative price caps, for **Step Change FY2030**, the mean impact remains around $19–20/MWh and the P95 impact around $49–52/MWh, showing that both typical and upper-tail scenario results are stable and supporting p99 as a robust base specification.
+
+<img width="1741" height="907" alt="price_impact_modelling_line" src="https://github.com/user-attachments/assets/33d6a8e5-b82b-4c38-8710-5dfa001d3132" />
+
+---
+
+### Selected Model
+
+The final model used for scenario analysis was:
+
+```text
+Lag-Free p99-Capped XGBoost Regressor
+```
+
+with validation performance of:
+
+| Metric | Result |
+| ------ | -----: |
+| MAE    |  40.47 |
+| RMSE   |  62.16 |
+| R²     |  0.462 |
+
+The model is therefore interpreted as a **scenario-impact model rather than a precise electricity-price forecasting tool**.
+
+Its purpose is to provide a consistent framework for comparing how predicted wholesale prices change under different levels of additional data-centre demand.
+
+---
+
+### Modelling Rationale
+
+The final specification was selected because it balanced three requirements:
+
+* **Nonlinearity** — electricity prices respond differently under normal and stressed market conditions.
+* **Scenario responsiveness** — removing price-lag variables allowed injected demand to influence predictions more directly.
+* **Robustness** — p99 capping reduced distortion from rare extreme spikes while preserving the broader structure of elevated-price behaviour.
+
+This combination made the model suitable for analysing **relative price impacts across demand-growth scenarios, seasons, hours and system-stress conditions**.
