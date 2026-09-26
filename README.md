@@ -624,3 +624,40 @@ These options should be evaluated against actual contract pricing, load flexibil
 Future data-centre growth creates both **broad continuous wholesale exposure** and **concentrated upper-tail risk**. Larger demand scenarios materially increase cumulative incremental cost, while stressed intervals produce greater cost intensity.
 
 The results therefore support evaluating **year-round procurement coverage alongside targeted protection for high-impact periods**, rather than managing future data-centre load using average wholesale-price assumptions alone.
+
+
+## Limitations
+
+- Designed for **scenario-impact analysis**, not precise short-term price forecasting.
+- Future scenarios reuse historical NSW market conditions from **July 2021 to June 2024**.
+- Data-centre demand is modelled as a **continuous additional load**, without detailed utilisation variation.
+- Renewable dispatch is held constant during scenario injection, so future generation-mix changes are not modelled.
+- Extreme wholesale price observations are capped at the **99th percentile** in the final model.
+- The model does not capture every market driver, including outages, transmission constraints, fuel prices, interconnector conditions or bidding behaviour.
+- Procurement-cost estimates represent **incremental wholesale exposure**, not the full electricity bill.
+- Hedging, contracting and demand-flexibility options are discussed as potential responses; the project does not optimise hedge ratios or contract structures.
+- Results should be interpreted as **scenario-based estimates of relative market and procurement exposure**, not exact future prices or costs.
+
+## Tools & Technologies
+
+| Area | Tools / Technologies |
+|---|---|
+| Programming & Analysis | Python, Pandas, NumPy |
+| Electricity Market Data | AEMO data, NEMOSIS |
+| Machine Learning | XGBoost, Scikit-learn |
+| Data Engineering | Multi-source integration, timestamp reconciliation, 5-minute interval processing |
+| Statistical Analysis | Correlation analysis, distribution analysis, VIF, percentile-based risk analysis |
+| Visualisation | Matplotlib, Plotly |
+| Scenario Modelling | Demand injection, feature recalculation, sensitivity testing |
+| Data Handling | Excel, CSV |
+| Development Environment | Jupyter Notebook, VS Code |
+| Version Control & Documentation | Git, GitHub |
+| AI-Assisted Development | GitHub Copilot, OpenAI Codex, ChatGPT |
+
+### AI-Assisted Development
+
+AI tools were used as supporting tools throughout the project:
+
+- **GitHub Copilot & OpenAI Codex:** used within VS Code to support code development, debugging, refactoring and workflow implementation.
+- **ChatGPT:** used for analytical review, methodology refinement, result interpretation and project documentation.
+- Model selection, validation, scenario design and final analytical conclusions were reviewed against the underlying data and model outputs.
