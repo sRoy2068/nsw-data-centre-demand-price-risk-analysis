@@ -661,3 +661,28 @@ AI tools were used as supporting tools throughout the project:
 - **GitHub Copilot & OpenAI Codex:** used within VS Code to support code development, debugging, refactoring and workflow implementation.
 - **ChatGPT:** used for analytical review, methodology refinement, result interpretation and project documentation.
 - Model selection, validation, scenario design and final analytical conclusions were reviewed against the underlying data and model outputs.
+
+## Repository Structure
+
+```text
+nsw-data-centre-demand-price-risk-analysis/
+│
+├── Datasets/
+│   ├── NSW Price and Demand 20210701_20240630...
+│   ├── NSW_21_24_Price_Demand_renewable.csv
+│   └── dispatch_by_fuel_2021-2024.csv
+│
+├── Outputs/
+│   ├── core_stress_summary_lagfree.csv
+│   ├── daytype_summary_lagfree.csv
+│   ├── demand_stress_summary_lagfree.csv
+│   ├── hour_summary_lagfree.csv
+│   ├── low_renewable_summary_lagfree.csv
+│   ├── overall_summary_lagfree.csv
+│   └── peak_summary_lagfree.csv
+│
+├── Python Analysis Files/
+│   ├── renewable_demand_integration.ipynb
+│   └── price_impact_analysis.ipynb
+│
+└── README.md
