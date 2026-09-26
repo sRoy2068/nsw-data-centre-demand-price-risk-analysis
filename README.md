@@ -41,45 +41,6 @@ A meaningful analysis therefore needs to identify both the **typical price impac
 
 This project addresses that problem by combining market data, renewable-generation data, scenario modelling and predictive analytics to quantify how additional data-centre demand may affect NSW wholesale prices and translate those results into practical market-risk insights.
 
-
-### Baseline vs Scenario Comparison
-
-The model does **not** compare future prices against FY2025 prices directly.
-
-Instead, it compares two predictions generated from the same historical 5-minute market conditions:
-
-```text
-Baseline Predicted Price
-= Modelled price using the original historical NSW demand profile
-
-Scenario Predicted Price
-= Modelled price after adding future data-centre demand to NSW demand
-```
-
-The estimated price impact is then calculated as:
-
-```text
-Price Impact
-= Scenario Predicted Price − Baseline Predicted Price
-```
-
-For example, if a particular historical interval has:
-
-```text
-Baseline predicted price = $120/MWh
-Scenario predicted price = $138/MWh
-```
-
-then:
-
-```text
-Price impact = $18/MWh
-```
-
-FY2025 is used only as the **reference point for calculating additional data-centre demand**. It is not the baseline price year.
-
-This approach isolates the marginal effect of additional data-centre load by holding the underlying historical market conditions constant and changing only the demand-related scenario inputs.
-
 ## Analytical Workflow
 
 The analysis follows an end-to-end workflow from **raw electricity-market data integration** through to **scenario-based price-impact and market-risk analysis**.
@@ -263,3 +224,126 @@ The pre-modelling analysis indicated that a simple demand-price regression would
 These findings supported the use of a **nonlinear modelling approach** capable of representing interactions between demand, renewable availability and market conditions.
 
 <img width="876" height="690" alt="image" src="https://github.com/user-attachments/assets/8f03bc6c-9868-4a66-8d4a-dcecd8c1845a" />
+
+
+## Scenario Demand Modelling
+
+Future NSW data-centre electricity demand was represented using three growth scenarios: **Slower Growth, Step Change and Accelerated Transition**. The purpose was to translate annual demand projections into additional continuous MW that could be introduced into the historical NSW market dataset.
+
+### Scenario Inputs
+
+FY2025 data-centre electricity demand of **2.6 TWh** was used as the reference baseline. Only the incremental demand above this level was introduced into the price-impact analysis.
+
+| Scenario               | FY2030 Data-Centre Demand |
+| ---------------------- | ------------------------: |
+| Slower Growth          |                   4.9 TWh |
+| Step Change            |                   8.2 TWh |
+| Accelerated Transition |                  13.3 TWh |
+
+The three scenarios represent progressively higher levels of future data-centre growth and therefore increasingly large additions to NSW electricity demand.
+
+---
+
+### Converting Annual Demand to MW
+
+The scenario inputs were originally expressed as annual electricity consumption in TWh/GWh, while `NSW1_Demand` is measured in MW at each 5-minute interval.
+
+Annual electricity demand was therefore converted into an equivalent continuous MW load using:
+
+```text
+Average MW = Annual GWh × 1,000 / 8,760
+```
+
+Additional demand above the FY2025 reference level was then calculated as:
+
+```text
+Additional MW = Future Scenario MW − FY2025 Baseline MW
+```
+
+This conversion made the scenario inputs compatible with the interval-level NSW demand data used by the price model.
+
+---
+
+### Additional Data-Centre Demand
+
+The resulting additional demand increased progressively across both time and scenario intensity.
+
+| Financial Year | Slower Growth | Step Change | Accelerated Transition |
+| -------------- | ------------: | ----------: | ---------------------: |
+| FY2026         |      45.66 MW |    79.91 MW |              114.16 MW |
+| FY2027         |      91.32 MW |   182.65 MW |              273.97 MW |
+| FY2028         |     136.99 MW |   296.80 MW |              502.28 MW |
+| FY2029         |     194.06 MW |   445.21 MW |              799.09 MW |
+| FY2030         |     262.56 MW |   639.27 MW |            1,221.46 MW |
+
+By FY2030, the central **Step Change** scenario adds approximately **639 MW** of continuous demand, while the **Accelerated Transition** scenario adds more than **1.2 GW**.
+
+<img width="1827" height="907" alt="DC_Demand_Line" src="https://github.com/user-attachments/assets/d6002777-3381-4bdb-9da6-4e894b603224" />
+
+
+### Scenario Demand Injection
+
+For each scenario-year combination, additional data-centre demand was added directly to the original historical NSW demand profile:
+
+```text
+Scenario NSW Demand =
+Historical NSW1_Demand + Additional Data-Centre MW
+```
+
+The additional MW was applied consistently across all 5-minute intervals, reflecting the near-continuous baseload characteristics of large data-centre operations.
+
+After demand injection:
+
+* `NSW1_Demand` was updated;
+* `Net_Demand` was recalculated;
+* demand-stress indicators were recalculated;
+* renewable dispatch was held constant;
+* all scenario-dependent features were updated before price prediction.
+
+Holding renewable dispatch unchanged allowed the analysis to isolate the demand-side effect of additional data-centre load rather than introducing simultaneous assumptions about future electricity supply.
+
+---
+
+### Baseline vs Scenario Comparison
+
+The model does **not** compare future prices against FY2025 prices directly.
+
+Instead, it compares two predictions generated from the same historical 5-minute market conditions:
+
+```text
+Baseline Predicted Price
+= Modelled price using the original historical NSW demand profile
+
+Scenario Predicted Price
+= Modelled price after adding future data-centre demand to NSW demand
+```
+
+The estimated price impact is then calculated as:
+
+```text
+Price Impact
+= Scenario Predicted Price − Baseline Predicted Price
+```
+
+For example, if a particular historical interval has:
+
+```text
+Baseline predicted price = $120/MWh
+Scenario predicted price = $138/MWh
+```
+
+then:
+
+```text
+Price impact = $18/MWh
+```
+
+FY2025 is used only as the **reference point for calculating additional data-centre demand**. It is not the baseline price year.
+
+This approach isolates the marginal effect of additional data-centre load by holding the underlying historical market conditions constant and changing only the demand-related scenario inputs.
+
+### Why This Matters
+
+This framework provides a consistent way to test how increasingly large blocks of continuous data-centre demand affect NSW wholesale prices under comparable historical market conditions.
+
+By applying the same modelling structure across all scenario-year combinations, differences in price impact can be attributed primarily to the **scale of additional data-centre demand** rather than changes in the underlying modelling framework.
