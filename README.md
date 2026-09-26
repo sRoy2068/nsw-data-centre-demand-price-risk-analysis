@@ -214,14 +214,12 @@ Key findings were:
 * **Hydro dispatch increased during high-price periods**, consistent with its role as a dispatchable balancing source.
 * Price pressure varied materially by **hour, month and season**, with elevated baseline prices concentrated around evening peaks and autumn/winter conditions.
 
-<!-- ADD EDA VISUAL HERE: price distribution or demand-vs-price -->
 
-<!--
+
 <img width="975" height="552" alt="image" src="https://github.com/user-attachments/assets/875237d2-2d00-46a5-a419-3ba258e3a80a" />
 
--->
+<img width="975" height="612" alt="image" src="https://github.com/user-attachments/assets/0af29be7-ca9f-48ae-b1ff-1fbad3a2e3db" />
 
----
 
 ### System-Stress Analysis
 
@@ -241,13 +239,7 @@ Price levels increased as market conditions became progressively tighter:
 
 This confirmed that wholesale-price risk is highly conditional and concentrated in periods where **demand pressure, reduced renewable availability and timing effects overlap**.
 
-<!-- ADD STRESS-CONDITION VISUAL HERE -->
-
-<!--
-![Price behaviour under market stress](outputs/system_stress_analysis.png)
--->
-
----
+<img width="975" height="498" alt="image" src="https://github.com/user-attachments/assets/d3bc3d64-7749-41c3-8d8d-13304fb8a0c7" />
 
 ### Feature Screening & Modelling Implications
 
@@ -269,3 +261,5 @@ The pre-modelling analysis indicated that a simple demand-price regression would
 * system-stress interactions.
 
 These findings supported the use of a **nonlinear modelling approach** capable of representing interactions between demand, renewable availability and market conditions.
+
+<img width="876" height="690" alt="image" src="https://github.com/user-attachments/assets/8f03bc6c-9868-4a66-8d4a-dcecd8c1845a" />
