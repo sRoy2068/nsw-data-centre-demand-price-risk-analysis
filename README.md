@@ -535,3 +535,92 @@ For **Step Change FY2030**:
 ### Executive Takeaway
 
 Future NSW data-centre growth creates a clear increase in wholesale price pressure, with the largest risks concentrated in **higher-growth scenarios, winter conditions and stressed market intervals**. Under the central Step Change case, FY2030 mean impact reaches **$19.28/MWh**, while P95 exposure rises to **$49.13/MWh**, showing that upper-tail risk is materially greater than average conditions. Overall, the analysis suggests that market exposure should be managed using both **broad procurement coverage and targeted protection during high-risk periods**.
+
+
+## Business Implications & Incremental Procurement Exposure
+
+### Translating Price Impact into Procurement Cost
+
+The procurement-cost analysis estimates the **additional wholesale cost on incremental data-centre load caused by the modelled price uplift**. It does not represent the facility's full electricity bill.
+
+Because the market dataset operates at 5-minute intervals, additional MW was converted to MWh before calculating cost:
+
+```text
+Additional DC MWh per interval = Additional DC MW × 5/60
+
+Extra interval cost = Price Impact × Additional DC MWh
+
+Total extra cost = Σ Extra interval cost
+```
+
+For **Step Change FY2030**, 639.27 MW of additional demand corresponds to approximately **53.27 MWh per 5-minute interval**. This interval load is multiplied by the modelled price impact to estimate incremental wholesale cost.
+
+---
+
+### FY2030 Scenario Procurement Exposure
+
+Applying each FY2030 demand scenario across the historical market simulation produces the following cumulative incremental wholesale exposure:
+
+| Scenario               | Additional Demand | Cumulative Extra Wholesale Cost |
+| ---------------------- | ----------------: | ------------------------------: |
+| Slower Growth          |         262.56 MW |                         $54.90M |
+| Step Change            |         639.27 MW |                        $323.51M |
+| Accelerated Transition |       1,221.46 MW |                         $1.187B |
+
+> **Finding:** Incremental wholesale exposure rises sharply as the scale of continuous data-centre demand increases.
+
+<img width="1789" height="906" alt="cost_DC_demand" src="https://github.com/user-attachments/assets/25c4f8e9-325c-458f-bff9-2e6e650ac13b" />
+
+---
+
+### Stress-Period Cost Exposure
+
+For **Step Change FY2030**, most cumulative cost occurs outside core-stress periods because those intervals are far more frequent. However, core-stress periods produce greater cost intensity.
+
+| Market Condition | Total Extra Cost | Mean Interval Cost | P95 Interval Cost |
+| ---------------- | ---------------: | -----------------: | ----------------: |
+| Non-core stress  |         $313.89M |          $1,023.29 |         $2,596.39 |
+| Core stress      |           $9.62M |          $1,157.82 |         $3,139.58 |
+
+> **Finding:** Non-core periods dominate cumulative exposure through frequency, while core-stress periods create higher per-interval severity.
+
+This means procurement risk is not confined to rare stressed intervals. Continuous data-centre load creates broad exposure across the market sample, with stressed conditions adding concentrated high-cost risk.
+
+---
+
+### Upper-Tail Risk & Hedging Implications
+
+The financial effect becomes more pronounced in the upper tail. For **Step Change FY2030**:
+
+| Metric | 5-Minute Extra Cost |
+| ------ | ------------------: |
+| Mean   |           $1,026.84 |
+| P95    |           $2,617.09 |
+| P99    |           $3,801.17 |
+
+The P99 interval exposure is more than three times the mean interval cost, showing why average impacts alone do not capture the full procurement-risk profile.
+
+> **Implication:** Procurement planning should consider both broad continuous exposure and less frequent, high-cost tail events rather than relying only on mean price impacts.
+
+<img width="1526" height="813" alt="5_min_cost_DC" src="https://github.com/user-attachments/assets/1656693a-ecc4-4d4b-ad3e-30e585fa105a" />
+
+---
+
+### Potential Risk Responses
+
+The analysis does not optimise a specific hedge ratio or procurement contract, but it identifies two distinct forms of exposure that can inform further strategy evaluation.
+
+| Risk Area                           | Potential Risk Response                                                             |
+| ----------------------------------- | ----------------------------------------------------------------------------------- |
+| Broad continuous exposure           | Baseload procurement coverage or longer-term contracting                            |
+| Upper-tail / stress-period exposure | Targeted hedging, flexible contracts, demand response or other tail-risk protection |
+
+These options should be evaluated against actual contract pricing, load flexibility and the organisation's risk tolerance before being treated as procurement recommendations.
+
+---
+
+### Business Takeaway
+
+Future data-centre growth creates both **broad continuous wholesale exposure** and **concentrated upper-tail risk**. Larger demand scenarios materially increase cumulative incremental cost, while stressed intervals produce greater cost intensity.
+
+The results therefore support evaluating **year-round procurement coverage alongside targeted protection for high-impact periods**, rather than managing future data-centre load using average wholesale-price assumptions alone.
