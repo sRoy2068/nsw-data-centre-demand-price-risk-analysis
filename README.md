@@ -1,92 +1,81 @@
 # NSW Data Centre Demand & Electricity Price Impact Analysis
 
-> **Scenario-based electricity market analytics project examining how future data-centre demand could affect NSW wholesale electricity prices and market risk.**
+## Project Overview
 
-This project combines **NSW electricity-market data, renewable-generation data, feature engineering and predictive modelling** to investigate how additional data-centre electricity demand may affect wholesale electricity prices.
+This project analyses how future growth in **NSW data-centre electricity demand** could affect wholesale electricity prices and market risk.
 
-Historical 5-minute NSW market data was integrated with solar, wind and hydro dispatch data, engineered into market and system-stress features, and modelled using **XGBoost**. Future data-centre demand scenarios were then injected into NSW electricity demand to estimate price impacts across scenarios, seasons, hours of day and stressed market conditions.
+The analysis combines **5-minute NSW electricity-market data** from July 2021 to June 2024 with solar, wind and hydro dispatch data. After integrating and validating multiple data sources, the dataset was enriched with temporal, renewable-output and system-stress features to examine the conditions associated with elevated electricity prices.
+
+Future data-centre demand scenarios were then converted into additional continuous MW load and injected into NSW demand. An **XGBoost regression model** was used to compare baseline and scenario prices and estimate the marginal price impact of additional data-centre load.
+
+The analysis evaluates how these impacts vary across:
+
+* demand-growth scenarios;
+* seasons;
+* hours of day;
+* renewable-output conditions;
+* system-stress periods;
+* upper-tail / high-risk price intervals.
+
+The resulting insights provide a basis for understanding **electricity-market exposure, procurement risk and potential risk-management strategies** for large data-centre loads.
 
 ---
 
 ## Business Problem
 
-Data centres operate as large, near-continuous electricity loads. As the sector expands in NSW, this additional baseload demand could increase wholesale electricity-price pressure and create greater exposure for electricity users, retailers and data-centre operators.
+Data centres are large, energy-intensive facilities that operate close to continuously. Unlike many commercial loads, their electricity demand remains relatively stable throughout the day, meaning rapid data-centre expansion can increase the underlying **baseload demand** placed on the electricity system.
 
-The analysis therefore focuses on four questions:
+For NSW, this raises an important market question:
 
-* How much additional continuous electricity demand could future data-centre growth add to NSW?
-* How could this additional demand affect NSW wholesale electricity prices?
-* During which seasons, hours and market conditions are price impacts greatest?
-* What do these findings imply for electricity procurement and market-risk management?
+> **How much additional wholesale electricity-price pressure could future data-centre growth create, and under which market conditions is that impact greatest?**
 
----
+The challenge is not only to estimate an average price increase. Wholesale electricity prices are highly variable and depend on the interaction between:
 
-## Analytical Workflow
+* system demand;
+* renewable-generation availability;
+* time of day;
+* seasonal conditions;
+* periods of system stress.
 
-**Scenario Demand → Feature Engineering → Price Modelling → Market Risk Analysis → Procurement Strategy**
+A meaningful analysis therefore needs to identify both the **typical price impact** of additional data-centre demand and the **higher-risk intervals** where the market is more sensitive to additional load.
 
-### 1. Scenario Demand
+This project addresses that problem by combining market data, renewable-generation data, scenario modelling and predictive analytics to quantify how additional data-centre demand may affect NSW wholesale prices and translate those results into practical market-risk insights.
 
-Annual data-centre electricity projections were converted into continuous MW load and expressed as additional demand above the FY2025 baseline.
 
-### 2. Feature Engineering
+### Baseline vs Scenario Comparison
 
-Historical market data was enriched with renewable-dispatch, temporal and system-stress variables.
+The model does **not** compare future prices against FY2025 prices directly.
 
-### 3. Price Modelling
+Instead, it compares two predictions generated from the same historical 5-minute market conditions:
 
-An XGBoost regression model was trained to estimate NSW wholesale electricity prices under baseline and additional-demand conditions.
+```text
+Baseline Predicted Price
+= Modelled price using the original historical NSW demand profile
 
-### 4. Market Risk Analysis
+Scenario Predicted Price
+= Modelled price after adding future data-centre demand to NSW demand
+```
 
-Price impacts were analysed across scenarios, seasons, hours of day, renewable conditions and system-stress periods.
+The estimated price impact is then calculated as:
 
-### 5. Procurement Strategy
+```text
+Price Impact
+= Scenario Predicted Price − Baseline Predicted Price
+```
 
-The resulting price-risk profiles provide evidence for electricity procurement, hedging and flexible-demand decisions.
+For example, if a particular historical interval has:
 
----
+```text
+Baseline predicted price = $120/MWh
+Scenario predicted price = $138/MWh
+```
 
-## Data
+then:
 
-The core analytical dataset contains **5-minute NSW electricity-market observations from July 2021 to June 2024**.
+```text
+Price impact = $18/MWh
+```
 
-### Main variables
+FY2025 is used only as the **reference point for calculating additional data-centre demand**. It is not the baseline price year.
 
-| Variable                 | Description                                  |
-| ------------------------ | -------------------------------------------- |
-| `NSW1_Price`             | NSW wholesale electricity price ($/MWh)      |
-| `NSW1_Demand`            | NSW electricity demand (MW)                  |
-| `solar_dispatch`         | Aggregated solar dispatch (MW)               |
-| `wind_dispatch`          | Aggregated wind dispatch (MW)                |
-| `hydro_dispatch`         | Aggregated hydro dispatch (MW)               |
-| `Net_Demand`             | Demand remaining after solar and wind output |
-| `DemandStressFlag`       | Identifies high-demand intervals             |
-| `CoreSystemStressFlag`   | High demand + low solar + evening peak       |
-| `SevereSystemStressFlag` | Core stress occurring during autumn/winter   |
-
-### Data Integration
-
-Separate renewable-generation datasets were integrated with NSW demand and price data at a common 5-minute temporal grain.
-
-Key preparation steps included:
-
-* timestamp alignment across multiple datasets;
-* validation of interval completeness;
-* missing-value and consistency checks;
-* integration of solar, wind and hydro dispatch;
-* creation of time-of-day, day-type and seasonal variables;
-* calculation of net demand;
-* construction of market-stress indicators.
-
-<!-- ADD SCREENSHOT / DATA-PREPARATION VISUAL HERE -->
-
-<!--
-![Data preparation workflow](outputs/your_image_name.png)
--->
-
----
-
-## Scenario Demand Modelling
-
-Annual data-centre electricity projections were con
+This approach isolates the marginal effect of additional data-centre load by holding the underlying historical market conditions constant and changing only the demand-related scenario inputs.
