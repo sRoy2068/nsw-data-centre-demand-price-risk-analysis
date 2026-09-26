@@ -128,3 +128,57 @@ flowchart LR
 
 8. **Procurement Strategy**
    Translated the resulting price-risk patterns into implications for electricity procurement, hedging and flexible demand management.
+
+## Data Sources & Integration
+
+The modelling dataset was created by combining **NSW wholesale price and demand data** with **5-minute renewable-generation dispatch data** for solar, wind and hydro.
+
+### Data Integration Workflow
+
+```mermaid
+flowchart LR
+    A[AEMO Generator Registration Data] --> B[Identify NSW Renewable DUIDs]
+    B --> C[Download 5-Minute SCADA Dispatch]
+    C --> D[Map DUIDs to Fuel Type]
+    D --> E[Aggregate Solar / Wind / Hydro]
+
+    F[NSW Price & Demand Data] --> G[Validate & Prepare Timestamps]
+
+    E --> H[Timestamp Reconciliation]
+    G --> H
+
+    H --> I[Merge on SETTLEMENTDATE]
+    I --> J[Integrated 5-Minute Market Dataset]
+```
+
+### Integration Steps
+
+* **Generator identification**
+  AEMO's **Generators and Scheduled Loads** registration data was retrieved using NEMOSIS and filtered to generators located in the `NSW1` region with **solar, wind or hydro** fuel sources.
+
+* **Renewable dispatch extraction**
+  The identified generator DUIDs were used to download `DISPATCH_UNIT_SCADA` observations at **5-minute resolution** for **July 2021 to June 2024**. The required fields were `SETTLEMENTDATE`, `DUID` and `SCADAVALUE`.
+
+* **Fuel-type mapping and aggregation**
+  Each DUID was mapped to its fuel source. Dispatch values were then aggregated by **settlement timestamp and fuel type** and pivoted into:
+
+  * `solar_dispatch`
+  * `wind_dispatch`
+  * `hydro_dispatch`
+
+* **Price and demand preparation**
+  NSW wholesale price and demand data was loaded separately and prepared at the same 5-minute temporal grain.
+
+* **Timestamp reconciliation**
+  A one-second timestamp mismatch was identified between the datasets: price/demand records were stored at times such as `00:04:59`, while SCADA records used `00:05:00`.
+  **One second was added to the price/demand timestamps** so equivalent market intervals aligned correctly.
+
+* **Merge validation**
+  Timestamp overlap was checked after reconciliation to confirm that the two datasets aligned as expected before the final join.
+
+* **Final integration**
+  The datasets were merged on `SETTLEMENTDATE`, producing a single 5-minute analytical dataset containing:
+
+  `NSW1_Price` • `NSW1_Demand` • `solar_dispatch` • `wind_dispatch` • `hydro_dispatch`
+
+This integrated dataset became the input for subsequent **data cleaning, exploratory analysis, feature engineering and price-impact modelling**.
